@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  nginx:
+    depends_on:
+      - backend
+      - client
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - '80:80'
+    container_name: nginx
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      - DOMAIN=${DOMAIN}
+      - VERSION=${VERSION}
+      - MONGODB_URL=${MONGODB_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - CLOUDINARY_NAME=${CLOUDINARY_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_HOST=${REDIS_HOST}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_ACCESS_SECRET_KEY=${AWS_ACCESS_SECRET_KEY}
+      - AWS_REGION=${AWS_REGION}
+    container_name: backend
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: client
