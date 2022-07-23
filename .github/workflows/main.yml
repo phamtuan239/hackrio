@@ -15,7 +15,7 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v2
 
-      - name: docker
+      - name: docker login
         run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 
       - name: docker build test
@@ -28,37 +28,40 @@ jobs:
           docker push travis99/hackrio-backend
           docker push travis99/hackrio-nginx
 
-      - name: docker compose run test
-        run: docker-compose up --build
+      # - name: docker compose run test
+      #   run: docker-compose up --build
 
-      # - name: Get timestamp
-      #   id: timestamp
-      #   run: echo "::set-output name=timestamp::$(date +'%s')"
+      - name: Get timestamp
+        id: timestamp
+        run: echo "::set-output name=timestamp::$(date +'%s')"
 
-      # - name: Generate deployment package
-      #   run: zip -r Hackrio.zip . -x '*.git*' -x '**node_modules**'
+      - name: Generate deployment package
+        run: zip -r Hackrio.zip . -x '*.git*' -x '**node_modules**'
 
-      # - name: Get timestamp
-      #   uses: gerred/actions/current-time@master
-      #   id: current-time
+      - name: Get timestamp
+        uses: gerred/actions/current-time@master
+        id: current-time
 
-      # - name: Run string replace
-      #   uses: frabert/replace-string-action@master
-      #   id: format-time
-      #   with:
-      #     pattern: '[:\.]+'
-      #     string: '${{ steps.current-time.outputs.time }}'
-      #     replace-with: '-'
-      #     flags: 'g'
+      - name: Run string replace
+        uses: frabert/replace-string-action@master
+        id: format-time
+        with:
+          pattern: '[:\.]+'
+          string: '${{ steps.current-time.outputs.time }}'
+          replace-with: '-'
+          flags: 'g'
 
-      # - name: deploy to EB
-      #   uses: einaregilsson/beanstalk-deploy@v20
-      #   with:
-      #     aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     application_name: hackrio-clone
-      #     environment_name: Hackrioclone-env
-      #     region: ap-south-1
-      #     existing_bucket_name: elasticbeanstalk-ap-south-1-891869786502
-      #     version_label: Hackrio-${{ steps.format-time.outputs.replaced }}
-      #     deployment_package: Hackrio.zip
+      - name: docker login
+        run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+      - name: deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: hackrio-clone
+          environment_name: Hackrioclone-env
+          region: ap-south-1
+          existing_bucket_name: elasticbeanstalk-ap-south-1-891869786502
+          version_label: Hackrio-${{ steps.format-time.outputs.replaced }}
+          deployment_package: Hackrio.zip
