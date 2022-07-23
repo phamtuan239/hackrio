@@ -26,3 +26,5 @@ Dockerfile.dev
 dockerfile-compose.yml
 dockerfile-compose.dev.yml
 
+./src/setupProxy.js
+
