@@ -5,17 +5,19 @@ services:
     depends_on:
       - backend
       - client
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
+    image: travis99/hackrio-nginx
+    # build:
+    #   context: ./nginx
+    #   dockerfile: Dockerfile
     restart: always
     ports:
       - '80:80'
     container_name: nginx
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: travis99/hackrio-backend
+    # build:
+    #   context: ./backend
+    #   dockerfile: Dockerfile
     environment:
       - DOMAIN=${DOMAIN}
       - VERSION=${VERSION}
@@ -33,7 +35,8 @@ services:
       - AWS_REGION=${AWS_REGION}
     container_name: backend
   client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
+    image: travis99/hackrio-client
+    # build:
+    #   context: ./client
+    #   dockerfile: Dockerfile
     container_name: client
