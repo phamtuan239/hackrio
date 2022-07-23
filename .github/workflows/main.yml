@@ -52,6 +52,6 @@ jobs:
           application_name: hackrio-clone
           environment_name: Hackrioclone-env
           region: ap-south-1
-          existing_bucket_name: elasticbeanstalk-ap-southeast-1-891869786502
+          existing_bucket_name: elasticbeanstalk-ap-south-1-891869786502
           version_label: Hackrio-${{ steps.format-time.outputs.replaced }}
           deployment_package: Hackrio.zip
